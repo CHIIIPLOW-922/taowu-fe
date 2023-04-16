@@ -21,10 +21,8 @@
 
     <div class="login-form">
       <h2 class="title">淘物商城后台管理系统</h2>
-      <div>
         <img :src="loginImg" class="loginImg" />
-      </div>
-      <el-form ref="uform" :model="form" label-width="10px">
+      <el-form ref="uform" :model="form" label-width="10px" class="el-login">
         <el-form-item prop="username" style="padding-top: 30px">
           <el-input
             prefix-icon="el-icon-user"
@@ -125,35 +123,48 @@ export default {
 }
 
 .login-form {
-  position: absolute;
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  z-index: 99;
   background-color: rgba(255, 255, 255, 0);
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
   padding: 20px;
-  backdrop-filter: blur(2px);
   width: 20%;
   height: 55%;
   /* Add your login form styles here */
+}
+.login-form::before{
+  content: "";
+  position: absolute;
+  backdrop-filter: blur(2px);
+  z-index: -1;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow:hidden;
 }
 .title {
   text-align: center;
   padding: 10px;
   left: auto;
+  z-index: 99;
 }
 .el-login {
-  width: 100%;
+  width: 80%;
+  z-index: 99;
 }
-.loginImg {
+
+.loginImg{
   width: 60px;
   height: 60px;
   border-radius: 50%;
+  z-index: 99;
 }
 /* .el-form-item__content:hover,
 .el-form-item__inner:hover {
