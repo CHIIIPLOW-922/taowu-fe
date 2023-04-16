@@ -21,7 +21,7 @@
 
     <div class="login-form">
       <h2 class="title">淘物商城后台管理系统</h2>
-        <img :src="loginImg" class="loginImg" />
+      <img :src="loginImg" class="loginImg" />
       <el-form ref="uform" :model="form" label-width="10px" class="el-login">
         <el-form-item prop="username" style="padding-top: 30px">
           <el-input
@@ -43,6 +43,7 @@
         </el-form-item>
         <el-form-item prop="code">
           <el-input
+            prefix-icon="el-icon-finished"
             v-model="form.code"
             autocomplete="off"
             style="width: 100%"
@@ -56,7 +57,9 @@
           >
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" style="width: 100%;position: relative" >登录</el-button>
+          <el-button type="primary" style="width: 100%; position: relative"
+            >登录</el-button
+          >
         </el-form-item>
       </el-form>
     </div>
@@ -73,6 +76,30 @@ export default {
     };
   },
   methods: {
+    /* isLogin() {
+      this.$refs["uform"].validate((valid) => {
+        //输账号和密码才会发送请求
+        if (valid) {
+          request.post("/user/login", this.login).then((res) => {
+            console.log(res.code);
+            if (res.code === "0") {
+              this.$message.success(
+                "登录成功,欢迎" + this.login.username + "用户"
+              );
+              sessionStorage.setItem("user", JSON.stringify(res.data)); //缓存用户信息
+              this.$router.push("/"); //登录成功后进行页面跳转，跳转到主页
+            } else if (!this.login.username || !this.login.password) {
+              this.$message.error("登录不能为空");
+            } else {
+              this.$message({
+                type: "error",
+                message: res.msg,
+              });
+            }
+          });
+        }
+      });
+    }, */
     drawCode() {
       const canvas = this.$refs.canvas;
       const ctx = canvas.getContext("2d");
@@ -112,7 +139,8 @@ export default {
 #particles-js {
   width: 100%;
   height: 100%;
-  position: absolute;
+  position: fixed;
+
 }
 .particles-container {
   position: absolute;
@@ -138,7 +166,7 @@ export default {
   height: 55%;
   /* Add your login form styles here */
 }
-.login-form::before{
+.login-form::before {
   content: "";
   position: absolute;
   backdrop-filter: blur(2px);
@@ -147,7 +175,7 @@ export default {
   left: 0;
   width: 100%;
   height: 100%;
-  overflow:hidden;
+  overflow: hidden;
 }
 .title {
   text-align: center;
@@ -160,7 +188,7 @@ export default {
   z-index: 99;
 }
 
-.loginImg{
+.loginImg {
   width: 60px;
   height: 60px;
   border-radius: 50%;
