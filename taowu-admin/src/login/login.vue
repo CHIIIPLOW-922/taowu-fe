@@ -111,7 +111,7 @@ export default {
 <style>
 #particles-js {
   width: 100%;
-  height: calc(100%-100px);
+  height: 100%;
   position: absolute;
 }
 .particles-container {
