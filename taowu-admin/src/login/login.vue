@@ -1,12 +1,12 @@
 <template>
   <div class="particles-container">
     <vue-particles
-      color="#585858"
+      color="#1A5276"
       :particleOpacity="0.8"
       :particlesNumber="100"
-      shapeType="circle"
+      shapeType="cube"
       :particleSize="4"
-      linesColor="#585858"
+      linesColor="#1A5276"
       :linesWidth="0.5"
       :lineLinked="true"
       :lineOpacity="0.4"
@@ -22,7 +22,13 @@
     <div class="login-form">
       <h2 class="title">淘物商城后台管理系统</h2>
       <img :src="loginImg" class="loginImg" />
-      <el-form ref="uform" :model="form" label-width="10px" class="el-login">
+      <el-form
+        ref="uform"
+        :model="form"
+        :rules="rules"
+        label-width="10px"
+        class="el-login"
+      >
         <el-form-item prop="username" style="padding-top: 30px">
           <el-input
             prefix-icon="el-icon-user"
@@ -50,14 +56,17 @@
             placeholder="请输入图形验证码"
           ></el-input>
         </el-form-item>
-        <el-form-item>
+        <el-form-item prop="canvasCaptcha">
           <canvas ref="canvas"></canvas>
           <el-button type="text" class="change" @click="changeCode"
             >换一张</el-button
           >
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" style="width: 100%; position: relative"
+          <el-button
+            type="primary"
+            style="width: 100%; position: relative"
+            @click="login()"
             >登录</el-button
           >
         </el-form-item>
@@ -72,41 +81,37 @@ export default {
   data() {
     return {
       loginImg: require("../assets/images/login.jpg"),
-      form: {},
+      form: {
+        username: "",
+        password: "",
+        code: "",
+      },
+      rules: {
+        username: [{ required: true, message: "请输入账号", trigger: "blur" }],
+        password: [{ required: true, message: "请输入密码", trigger: "blur" }],
+        code: [{ required: true, message: "请输入验证码", trigger: "blur" }],
+      },
     };
   },
   methods: {
-    /* isLogin() {
-      this.$refs["uform"].validate((valid) => {
-        //输账号和密码才会发送请求
+    login() {
+      this.$refs['uform'].validate(valid => {
         if (valid) {
-          request.post("/user/login", this.login).then((res) => {
-            console.log(res.code);
-            if (res.code === "0") {
-              this.$message.success(
-                "登录成功,欢迎" + this.login.username + "用户"
-              );
-              sessionStorage.setItem("user", JSON.stringify(res.data)); //缓存用户信息
-              this.$router.push("/"); //登录成功后进行页面跳转，跳转到主页
-            } else if (!this.login.username || !this.login.password) {
-              this.$message.error("登录不能为空");
-            } else {
-              this.$message({
-                type: "error",
-                message: res.msg,
-              });
-            }
-          });
+          // 验证通过，执行登录操作
+          console.log('登录成功');
+        } else {
+          // 验证失败，提示用户错误信息
+          console.log('表单验证失败');
         }
       });
-    }, */
+    },
     drawCode() {
       const canvas = this.$refs.canvas;
       const ctx = canvas.getContext("2d");
       canvas.width = 100;
       canvas.height = 30;
       const code = this.createCode();
-      this.captcha = code;
+      this.canvasCaptcha = code;
       ctx.fillStyle = "#f0f0f0";
       ctx.fillRect(0, 0, canvas.width, canvas.height);
       ctx.font = "bold 20px Arial";
@@ -140,7 +145,6 @@ export default {
   width: 100%;
   height: 100%;
   position: fixed;
-
 }
 .particles-container {
   position: absolute;
