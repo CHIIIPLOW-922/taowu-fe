@@ -95,13 +95,13 @@ export default {
   },
   methods: {
     login() {
-      this.$refs['uform'].validate(valid => {
+      this.$refs["uform"].validate((valid) => {
         if (valid) {
           // 验证通过，执行登录操作
-          console.log('登录成功');
+          console.log("登录成功");
         } else {
           // 验证失败，提示用户错误信息
-          console.log('表单验证失败');
+          console.log("表单验证失败");
         }
       });
     },
