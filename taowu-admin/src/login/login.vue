@@ -13,7 +13,7 @@
       :linesDistance="200"
       :moveSpeed="3.5"
       :hoverEffect="true"
-      hoverMode="grab"
+      hoverMode="bubble"
       :clickEffect="true"
       clickMode="push"
     >
