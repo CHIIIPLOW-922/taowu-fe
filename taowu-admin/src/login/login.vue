@@ -2,10 +2,10 @@
   <div class="particles-container">
     <vue-particles
       color="#1A5276"
-      :particleOpacity="0.8"
-      :particlesNumber="100"
-      shapeType="cube"
-      :particleSize="4"
+      :particleOpacity="0.9"
+      :particlesNumber="85"
+      shapeType="snow"
+      :particleSize="3.5"
       linesColor="#1A5276"
       :linesWidth="0.5"
       :lineLinked="true"
