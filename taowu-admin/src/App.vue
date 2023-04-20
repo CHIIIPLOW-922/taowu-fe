@@ -1,19 +1,31 @@
 <template>
-  <div class="app">
+  <div id="app">
     <router-view />
   </div>
 </template>
 
 <script>
+export default {
+    name: "App"
+};
 </script>
 
 <style>
-.app {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
+html,
+body {
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    padding: 0px;
+    margin: 0px;
+}
+#app {
+    font-family: "Avenir", Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    color: #2c3e50;
+    widows: 100%;
+    height: 100%;
 }
 </style>
 

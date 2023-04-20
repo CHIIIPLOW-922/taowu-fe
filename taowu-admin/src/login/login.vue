@@ -66,7 +66,7 @@
           <el-button
             type="primary"
             style="width: 100%; position: relative"
-            @click="login()"
+            @click="login"
             >登录</el-button
           >
         </el-form-item>
@@ -80,6 +80,7 @@ export default {
   name: "admin-login",
   data() {
     return {
+      logining:false,
       loginImg: require("../assets/images/login.jpg"),
       form: {
         username: "",
@@ -97,11 +98,40 @@ export default {
     login() {
       this.$refs["uform"].validate((valid) => {
         if (valid) {
+          if (
+            this.form.code.toLocaleLowerCase() !==
+            this.canvasCaptcha.toLocaleLowerCase()
+          ) {
+            this.$notify.error("验证码错误，请重试");
+            this.form.code = '';
+            this.drawCode();
+            return;
+          }
           // 验证通过，执行登录操作
-          console.log("登录成功");
+          this.$axios
+            .post("/api/admin/login", {
+              adminAccount: this.form.username,
+              adminPassword: this.form.password,
+            })
+            .then((res) => {
+              if (res.data.code === "922") {
+                let user = JSON.stringify(res.data.data);
+                localStorage.setItem("admin", user);
+                this.form = {};
+                this.$notify.success(res.data.msg);
+                this.$router.push("/user");
+              } else {
+                this.$refs["uform"].resetFields();
+                this.drawCode();
+                this.$notify.error(res.data.msg);
+              }
+            })
+            .catch((err) => {
+              return Promise.reject(err);
+            });
         } else {
           // 验证失败，提示用户错误信息
-          console.log("表单验证失败");
+          return false;
         }
       });
     },
