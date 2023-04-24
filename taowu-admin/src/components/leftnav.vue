@@ -6,12 +6,12 @@
     unique-opened
     :default-active="$route.path"
     class="el-menu-vertical-demo"
-    background-color="#334157"
+    background-color="#273746"
     text-color="#fff"
     active-text-color="#ffd04b"
   >
     <div class="logobox">
-      <img class="logoimg" src="../assets/images/logo.png" alt="" />
+      <img class="logoimg" src="../assets/images/login.jpg" alt="" />
     </div>
     <el-submenu v-for="menu in menu" :key="menu.menuid" :index="menu.menuname">
       <template slot="title">
@@ -113,7 +113,7 @@ export default {
   padding: 0px;
 }
 .el-menu-bg {
-  background-color: #1f2d3d !important;
+  background-color: #273746 !important;
 }
 .el-menu {
   border: none;
@@ -128,5 +128,7 @@ export default {
 }
 .logoimg {
   height: 40px;
+  width: 40px;
+  border-radius: 50%;
 }
 </style>

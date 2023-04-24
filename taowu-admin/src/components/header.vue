@@ -2,7 +2,7 @@
   <el-menu
     class="el-menu-demo"
     mode="horizontal"
-    background-color="#334157"
+    background-color="#273746"
     text-color="#fff"
     active-text-color="#fff"
   >
