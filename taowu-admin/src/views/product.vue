@@ -1,25 +1,23 @@
 <template>
   <div>
     <div>
-    <!-- 面包屑导航 -->
-    <el-breadcrumb separator-class="el-icon-arrow-right">
-      <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item>商品管理</el-breadcrumb-item>
-    </el-breadcrumb>
-  </div>
-    <el-form
-      class="search-part"
-      style="padding-top: 40px; padding-left: 50px; display: flex"
-    >
+      <!-- 面包屑导航 -->
+      <el-breadcrumb separator-class="el-icon-arrow-right">
+        <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+        <el-breadcrumb-item>商品管理</el-breadcrumb-item>
+      </el-breadcrumb>
+    </div>
+    <el-form class="search-part" style="padding-top: 40px; display: flex">
       <el-form-item prop="search" style="width: 30%">
         <el-input
+          v-model="search"
           prefix-icon="el-icon-search"
           style="width: 95%"
           placeholder="请输入商品名称"
         ></el-input>
       </el-form-item>
-      <el-form-item prop="search">
-        <el-button type="primary" class="search-button">搜索</el-button>
+      <el-form-item prop="search-button">
+        <el-button type="primary" class="search-button" @click="load">搜索</el-button>
       </el-form-item>
     </el-form>
     <div style="margin: 10px 0">
@@ -139,8 +137,8 @@ export default {
         .then((response) => {
           //根据返回值进行判断是否上传成功
           console.log(response);
-          if (response.data.code === '922') {
-            this.form.url=response.data.data;
+          if (response.data.code === "922") {
+            this.form.url = response.data.data;
             //上传成功
             console.log("上传图片成功");
           } else {
@@ -159,14 +157,13 @@ export default {
     load() {
       this.$axios
         .get("/api/admin/product/list", {
-          productSearchParam: {
-            search:this.search,
+          parmas: {
+            search: this.search,
             currentPage: this.currentPage,
             pageSize: this.pageSize,
           },
         })
         .then((res) => {
-          console.log(this.currentPage,this.pageSize)
           this.tableData = res.data.data;
           this.total = res.data.total;
           console.log(res.data);
@@ -177,15 +174,15 @@ export default {
     },
     handleSizeChange(pageSize) {
       //改变当前每页的个数触发
-      this.pageSize = pageSize; 
-      console.log(this.pageSize)//赋值
+      this.pageSize = pageSize;
+      console.log(this.pageSize); //赋值
       this.load();
     },
 
     handleCurrentChange(pageNum) {
-      this.currentPage = pageNum
+      this.currentPage = pageNum;
       //改变当前页码触发
-      console.log(this.currentPage)
+      console.log(this.currentPage);
       this.load();
     },
   },
