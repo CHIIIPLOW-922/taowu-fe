@@ -4,26 +4,13 @@
         <!-- 面包屑导航 -->
         <el-breadcrumb separator-class="el-icon-arrow-right">
           <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-          <el-breadcrumb-item>商品管理</el-breadcrumb-item>
+          <el-breadcrumb-item>图片管理</el-breadcrumb-item>
         </el-breadcrumb>
       </div>
-      <el-form class="search-part" style="padding-top: 40px; display: flex">
-        <el-form-item prop="search" style="width: 30%">
-          <el-input
-            v-model="search"
-            prefix-icon="el-icon-search"
-            style="width: 95%"
-            placeholder="请输入商品名称"
-          ></el-input>
-        </el-form-item>
-        <el-form-item prop="search-button">
-          <el-button type="primary" class="search-button" @click="load">搜索</el-button>
-        </el-form-item>
-      </el-form>
-      <div style="margin: 10px 0">
+      <div style="margin: 10px 0;margin-top: 20px;">
         <el-button type="primary" @click="add" size="mini">新增</el-button>
       </div>
-      <el-table :data="tableData" style="width: 100%" stripe border size="small">
+      <el-table :data="tableData" style="width: 100%;" stripe border size="small">
         <el-table-column prop="product_id" label="ID" style="width: 5">
         </el-table-column>
         <el-table-column prop="product_name" label="商品名称"> </el-table-column>
