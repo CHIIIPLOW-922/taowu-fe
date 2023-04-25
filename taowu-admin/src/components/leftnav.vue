@@ -100,7 +100,7 @@ export default {
         {
           menuid: 8,
           icon: "el-icon-s-order",
-          menuname: "订单管理",
+          menuname: "订单展示",
           hasThird: null,
           url: null,
           menus: [

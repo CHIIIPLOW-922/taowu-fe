@@ -174,7 +174,7 @@
               style="width: 85%"
             ></el-input>
           </el-form-item>
-          <el-form-item label="商品图片" v-model="form.pictureUrl">
+          <el-form-item label="商品图片" v-model="pictureUrl">
             <el-upload
               action=""
               :http-request="upload"
@@ -267,7 +267,7 @@
           </el-form-item>
           <el-form-item
             label="商品图片"
-            v-model="editform.pictureUrl"
+            v-model="pictureUrl"
             size="mini"
           >
             <el-upload
@@ -308,6 +308,7 @@ export default {
       form: {},
       editform: {},
       tableData: [],
+      pictureUrl:""
     };
   },
   created() {
@@ -325,7 +326,7 @@ export default {
           //根据返回值进行判断是否上传成功
           console.log(response);
           if (response.data.code === "922") {
-            this.form.pictureUrl = response.data.data;
+            this.pictureUrl = response.data.data;
             this.$notify.success("图片上传成功,路径为" + this.form.url);
             //上传成功
             console.log("上传图片成功");
@@ -341,7 +342,7 @@ export default {
         });
     },
     add() {
-      (this.dialogVisible = true), (this.form = {});
+      (this.dialogVisible = true), (this.form = {},this.pictureUrl="");
     },
     editProduct(data) {
       this.editVisible = true;
@@ -356,8 +357,8 @@ export default {
         num: data.product_num,
         sales: data.product_sales,
         intro: data.product_intro,
-        pictureUrl: data.product_picture,
       };
+      this.pictureUrl=data.product_picture;
       console.log(this.editform);
     },
     edit() {
@@ -368,7 +369,7 @@ export default {
           category_id: this.editform.categoryId,
           product_title: this.editform.title,
           product_intro: this.editform.intro,
-          product_picture: this.editform.pictureUrl,
+          product_picture: this.pictureUrl,
           product_price: this.editform.price,
           product_sellprice: this.editform.sellprice,
           product_num: this.editform.num,
@@ -432,7 +433,7 @@ export default {
           category_id: this.form.categoryId,
           product_title: this.form.title,
           product_intro: this.form.intro,
-          product_picture: this.form.pictureUrl,
+          product_picture: this.pictureUrl,
           product_price: this.form.price,
           product_sellprice: this.form.sellprice,
           product_num: this.form.num,

@@ -4,95 +4,30 @@
       <!-- 面包屑导航 -->
       <el-breadcrumb separator-class="el-icon-arrow-right">
         <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-        <el-breadcrumb-item>订单管理</el-breadcrumb-item>
+        <el-breadcrumb-item>订单列表</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
-    <div style="margin: 10px 0;margin-top: 20px;">
-      <el-button type="primary" @click="add" size="mini">新增</el-button>
-    </div>
-    <el-table :data="tableData" style="width: 100%;" stripe border size="small">
-      <el-table-column prop="product_id" label="ID" style="width: 5">
+    <el-table :data="tableData" style="width: 100%;margin-top:50px" stripe border size="small">
+      <el-table-column prop="order_id" label="订单ID" width="190">
       </el-table-column>
-      <el-table-column prop="product_name" label="商品名称"> </el-table-column>
-      <el-table-column prop="category_idd" label="类别ID"> </el-table-column>
-      <el-table-column prop="product_title" label="标题"> </el-table-column>
-      <el-table-column prop="product_picture" label="图片地址">
+      <el-table-column prop="user_id" label="用户ID"  width="190"> </el-table-column>
+      <el-table-column prop="product_num" label="商品种类" width="190"> </el-table-column>
+      <el-table-column prop="order_num" label="订单商品数量" width="190"> </el-table-column>
+      <el-table-column prop="order_price" label="订单金额" width="190">
       </el-table-column>
-      <el-table-column prop="product_price" label="商品价格"> </el-table-column>
-      <el-table-column prop="product_sellprice" label="商城价格">
-      </el-table-column>
-      <el-table-column prop="product_num" label="销售数量"> </el-table-column>
-      <el-table-column prop="product_sales" label="商品库存"> </el-table-column>
-      <el-table-column prop="product_intro" label="商品描述"> </el-table-column>
-      <el-table-column label="操作">
-        <template #default="scope">
-          <el-button size="mini">编辑</el-button>
-          <el-popconfirm
-            title="确认删除吗？"
-            @confirm="handleDelete(scope.row.id)"
-            >//el里面的confirm方法，根据id删除
-            <template #reference>
-              <el-button size="mini" type="danger">删除</el-button>
-            </template>
-          </el-popconfirm>
-        </template>
-      </el-table-column>
+      <el-table-column prop="order_time" label="订单时间"> </el-table-column>
     </el-table>
     <div style="margin: 10px 0">
       <el-pagination
-        :currentPage="currentPage"
+        :currentPage="orderCurrentPage"
         :page-sizes="[5, 15, 30]"
-        :page-size="pageSize"
+        :page-size="orderPageSize"
         layout="total, sizes, prev, pager, next, jumper"
         :total="total"
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
       >
       </el-pagination>
-
-      <el-dialog :visible="dialogVisible" title="提示" width="30%">
-        <el-form :model="form" label-width="120px">
-          <el-form-item label="商品名称">
-            <el-input v-model="form.shopName" style="width: 80%"></el-input>
-          </el-form-item>
-          <el-form-item label="商品图片" v-model="form.url">
-            <el-upload
-              action=""
-              :http-request="upload"
-              :limit="1"
-              list-type="picture-card"
-            >
-              <el-button type="primary">点击上传</el-button>
-            </el-upload>
-          </el-form-item>
-          <el-form-item label="卖点">
-            <el-input v-model="form.shopPoint" style="width: 80%"></el-input>
-          </el-form-item>
-          <el-form-item label="商品价格">
-            <el-input v-model="form.price" style="width: 80%"></el-input>
-          </el-form-item>
-          <el-form-item label="商品数量">
-            <el-input
-              type="textarea"
-              v-model="form.num"
-              style="width: 80%"
-            ></el-input>
-          </el-form-item>
-          <el-form-item label="商品描述">
-            <el-input
-              type="textarea"
-              v-model="form.describes"
-              style="width: 80%"
-            ></el-input>
-          </el-form-item>
-        </el-form>
-        <template #footer>
-          <span class="dialog-footer">
-            <el-button @click="dialogVisible = false">取消</el-button>
-            <el-button type="primary" @click="save">确定</el-button>
-          </span>
-        </template>
-      </el-dialog>
     </div>
   </div>
 </template>
@@ -102,12 +37,9 @@ export default {
   name: "order-table",
   data() {
     return {
-      search: "",
       total: 0,
-      currentPage: 1,
-      pageSize: 15,
-      dialogVisible: false,
-      form: {},
+      orderCurrentPage: 1,
+      orderPageSize: 15,
       tableData: [],
     };
   },
@@ -115,39 +47,12 @@ export default {
     this.load();
   },
   methods: {
-    upload(param) {
-      const formData = new FormData();
-      formData.append("file", param.file);
-      console.log(formData);
-      this.$axios
-        .post("/api/admin/files/upload", formData)
-        .then((response) => {
-          //根据返回值进行判断是否上传成功
-          console.log(response);
-          if (response.data.code === "922") {
-            this.form.url = response.data.data;
-            //上传成功
-            console.log("上传图片成功");
-          } else {
-            //上传失败
-            console.log("图片上传失败");
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-          console.log("异常处理");
-        });
-    },
-    add() {
-      (this.dialogVisible = true), (this.form = {});
-    },
     load() {
       this.$axios
-        .get("/api/admin/product/list", {
+        .get("/api/admin/order/list", {
           parmas: {
-            search: this.search,
-            currentPage: this.currentPage,
-            pageSize: this.pageSize,
+            currentPage: this.orderCurrentPage,
+            pageSize: this.orderPageSize,
           },
         })
         .then((res) => {
@@ -161,15 +66,15 @@ export default {
     },
     handleSizeChange(pageSize) {
       //改变当前每页的个数触发
-      this.pageSize = pageSize;
-      console.log(this.pageSize); //赋值
+      this.orderPageSize = pageSize;
+      console.log(this.orderPageSize); //赋值
       this.load();
     },
 
     handleCurrentChange(pageNum) {
-      this.currentPage = pageNum;
+      this.orderCurrentPage = pageNum;
       //改变当前页码触发
-      console.log(this.currentPage);
+      console.log(this.orderCurrentPage);
       this.load();
     },
   },

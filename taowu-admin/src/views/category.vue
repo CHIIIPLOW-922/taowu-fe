@@ -149,15 +149,15 @@ export default {
     },
     handleSizeChange(pageSize) {
       //改变当前每页的个数触发
-      this.pageSize = pageSize;
-      console.log(this.pageSize); //赋值
+      this.categoryPageSize = pageSize;
+      console.log(this.categoryPageSize); //赋值
       this.load();
     },
 
     handleCurrentChange(pageNum) {
-      this.currentPage = pageNum;
+      this.categoryCurrentPage = pageNum;
       //改变当前页码触发
-      console.log(this.currentPage);
+      console.log(this.categoryCurrentPage);
       this.load();
     },
     editDialog(data){
