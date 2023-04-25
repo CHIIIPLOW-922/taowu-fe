@@ -57,8 +57,8 @@ export default {
         },
         {
           menuid: 3,
-          icon: "el-icon-s-order",
-          menuname: "订单管理",
+          icon: "el-icon-s-grid",
+          menuname: "分类管理",
           hasThird: null,
           url: null,
           menus: [
@@ -70,8 +70,17 @@ export default {
               url: "category",
               menus: null,
             },
+          ],
+        },
+        {
+          menuid: 5,
+          icon: "el-icon-s-goods",
+          menuname: "商品管理",
+          hasThird: null,
+          url: null,
+          menus: [
             {
-              menuid: 5,
+              menuid: 6,
               icon: "el-icon-goods",
               menuname: "商品列表",
               hasThird: "N",
@@ -79,7 +88,24 @@ export default {
               menus: null,
             },
             {
-              menuid: 6,
+              menuid: 7,
+              icon: "el-icon-picture",
+              menuname: "图片列表",
+              hasThird: "N",
+              url: "picture",
+              menus: null,
+            },
+          ],
+        },
+        {
+          menuid: 8,
+          icon: "el-icon-s-order",
+          menuname: "订单管理",
+          hasThird: null,
+          url: null,
+          menus: [
+            {
+              menuid: 9,
               icon: "el-icon-document-checked",
               menuname: "订单列表",
               hasThird: "N",

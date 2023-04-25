@@ -55,6 +55,14 @@ const routes = [
         },
         component: () => import("@/views/order")
       },
+      {
+        path:'/picture',
+        name:'picture',
+        meta:{
+          requireAuth: true
+        },
+        component:()=>import('@/views/picture')
+      }
     ]
   },
   {

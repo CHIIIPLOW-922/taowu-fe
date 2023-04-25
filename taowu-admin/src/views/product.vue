@@ -17,7 +17,9 @@
         ></el-input>
       </el-form-item>
       <el-form-item prop="search-button">
-        <el-button type="primary" class="search-button" @click="load">搜索</el-button>
+        <el-button type="primary" class="search-button" @click="load"
+          >搜索</el-button
+        >
       </el-form-item>
     </el-form>
     <div style="margin: 10px 0">
@@ -26,17 +28,36 @@
     <el-table :data="tableData" style="width: 100%" stripe border size="small">
       <el-table-column prop="product_id" label="ID" style="width: 5">
       </el-table-column>
-      <el-table-column prop="product_name" label="商品名称"> </el-table-column>
-      <el-table-column prop="category_idd" label="类别ID"> </el-table-column>
-      <el-table-column prop="product_title" label="标题"> </el-table-column>
-      <el-table-column prop="product_picture" label="图片地址">
+      <el-table-column
+        prop="product_name"
+        label="商品名称"
+        show-overflow-tooltip="true"
+      >
+      </el-table-column>
+      <el-table-column prop="category_id" label="类别ID"> </el-table-column>
+      <el-table-column
+        prop="product_title"
+        label="标题"
+        show-overflow-tooltip="true"
+      >
+      </el-table-column>
+      <el-table-column
+        prop="product_picture"
+        label="图片地址"
+        show-overflow-tooltip="true"
+      >
       </el-table-column>
       <el-table-column prop="product_price" label="商品价格"> </el-table-column>
       <el-table-column prop="product_sellprice" label="商城价格">
       </el-table-column>
       <el-table-column prop="product_num" label="销售数量"> </el-table-column>
       <el-table-column prop="product_sales" label="商品库存"> </el-table-column>
-      <el-table-column prop="product_intro" label="商品描述"> </el-table-column>
+      <el-table-column
+        prop="product_intro"
+        label="商品描述"
+        show-overflow-tooltip="true"
+      >
+      </el-table-column>
       <el-table-column label="操作">
         <template #default="scope">
           <el-button size="mini">编辑</el-button>
