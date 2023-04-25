@@ -82,7 +82,9 @@
       </el-table-column>
       <el-table-column label="操作" width="140">
         <template #default="scope">
-          <el-button size="mini" @click="edit">编辑</el-button>
+          <el-button size="mini" @click="editProduct(scope.row)"
+            >编辑</el-button
+          >
           <el-popconfirm
             title="确认删除吗？"
             @confirm="handleDelete(scope.row.product_id)"
@@ -110,19 +112,19 @@
         :visible="dialogVisible"
         title="新增"
         :show-close="false"
-        width="30"
+        width="40%"
         size="mini"
       >
         <el-form :model="form" label-width="90px" size="mini">
           <el-form-item label="商品名称">
-            <el-input v-model="form.name" style="width: 60%"></el-input>
+            <el-input v-model="form.name" style="width: 85%"></el-input>
           </el-form-item>
           <el-form-item label="类别">
             <el-select
               :data="categoryList"
               v-model="form.categoryId"
               placeholder="请选择"
-              style="width: 60%"
+              style="width: 85%"
             >
               <el-option
                 v-for="item in categoryList"
@@ -134,19 +136,19 @@
             </el-select>
           </el-form-item>
           <el-form-item label="标题">
-            <el-input v-model="form.title" style="width: 60%"></el-input>
+            <el-input v-model="form.title" style="width: 85%"></el-input>
           </el-form-item>
           <el-form-item label="商品价格">
             <el-input
               v-model="form.price"
-              style="width: 60%"
+              style="width: 85%"
               type="number"
             ></el-input>
           </el-form-item>
           <el-form-item label="商城价格">
             <el-input
               v-model="form.sellprice"
-              style="width: 60%"
+              style="width: 85%"
               type="number"
             ></el-input>
           </el-form-item>
@@ -154,21 +156,22 @@
             <el-input
               type="number"
               v-model="form.sales"
-              style="width: 60%"
+              style="width: 85%"
             ></el-input>
           </el-form-item>
           <el-form-item label="商品库存">
             <el-input
               type="number"
               v-model="form.num"
-              style="width: 60%"
+              style="width: 85%"
             ></el-input>
           </el-form-item>
           <el-form-item label="商品描述">
             <el-input
+              size="mini"
               type="textarea"
               v-model="form.intro"
-              style="width: 60%"
+              style="width: 85%"
             ></el-input>
           </el-form-item>
           <el-form-item label="商品图片" v-model="form.pictureUrl">
@@ -194,50 +197,94 @@
         :visible="editVisible"
         title="编辑"
         :show-close="false"
-        width="30%"
+        width="40%"
       >
-        <el-form :model="editform" label-width="120px">
-          <el-form-item label="商品名称">
-            <el-input v-model="editform.name" style="width: 80%"></el-input>
-          </el-form-item>
-          <el-form-item label="商品图片" v-model="editform.url">
-            <el-upload
-              action=""
-              :http-request="upload"
-              :limit="1"
-              list-type="picture-card"
-            >
-              <el-button type="primary">点击上传</el-button>
-            </el-upload>
-          </el-form-item>
-          <el-form-item label="卖点">
+        <el-form :model="editform" label-width="120px" size="mini">
+          <el-form-item label="ID">
             <el-input
-              v-model="editform.shopPoint"
-              style="width: 80%"
+              v-model="editform.id"
+              style="width: 85%"
+              :disabled="true"
             ></el-input>
           </el-form-item>
-          <el-form-item label="商品价格">
-            <el-input v-model="editform.price" style="width: 80%"></el-input>
+          <el-form-item label="商品名称">
+            <el-input v-model="editform.name" style="width: 85%"></el-input>
           </el-form-item>
-          <el-form-item label="商品数量">
+          <el-form-item label="类别">
+            <el-select
+              :data="categoryList"
+              v-model="editform.categoryId"
+              placeholder="请选择"
+              style="width: 85%"
+            >
+              <el-option
+                v-for="item in categoryList"
+                :key="item.category_id"
+                :label="item.category_name"
+                :value="item.category_id"
+              >
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="标题">
+            <el-input v-model="editform.title" style="width: 85%"></el-input>
+          </el-form-item>
+          <el-form-item label="商品价格">
             <el-input
-              type="textarea"
+              v-model="editform.price"
+              style="width: 85%"
+              type="number"
+            ></el-input>
+          </el-form-item>
+          <el-form-item label="商城价格">
+            <el-input
+              v-model="editform.sellprice"
+              style="width: 85%"
+              type="number"
+            ></el-input>
+          </el-form-item>
+          <el-form-item label="销售数量">
+            <el-input
+              type="number"
+              v-model="editform.sales"
+              style="width: 85%"
+            ></el-input>
+          </el-form-item>
+          <el-form-item label="商品库存">
+            <el-input
+              type="number"
               v-model="editform.num"
-              style="width: 80%"
+              style="width: 85%"
             ></el-input>
           </el-form-item>
           <el-form-item label="商品描述">
             <el-input
               type="textarea"
-              v-model="editform.describes"
-              style="width: 80%"
+              size="mini"
+              v-model="editform.intro"
+              style="width: 85%"
             ></el-input>
+          </el-form-item>
+          <el-form-item
+            label="商品图片"
+            v-model="editform.pictureUrl"
+            size="mini"
+          >
+            <el-upload
+              action=""
+              :http-request="upload"
+              :limit="1"
+              list-type="picture-card"
+              size="mini"
+            >
+              <el-button type="primary" size="mini">点击上传</el-button>
+            </el-upload>
           </el-form-item>
         </el-form>
         <template #footer>
           <span class="dialog-footer">
-            <el-button @click="editVisible = false">取消</el-button>
-            <el-button type="primary" @click="edit">确定</el-button>
+            <el-button @click="editVisible = false" size="mini">取消</el-button>
+            <el-button type="primary" @click="edit" size="mini">确定</el-button>
           </span>
         </template>
       </el-dialog>
@@ -296,9 +343,50 @@ export default {
     add() {
       (this.dialogVisible = true), (this.form = {});
     },
-    edit() {
+    editProduct(data) {
       this.editVisible = true;
-      this.editform = {};
+      console.log(data);
+      this.editform = {
+        id: data.product_id,
+        name: data.product_name,
+        title: data.product_title,
+        categoryId: data.category_id,
+        price: data.product_price,
+        sellprice: data.product_sellprice,
+        num: data.product_num,
+        sales: data.product_sales,
+        intro: data.product_intro,
+        pictureUrl: data.product_picture,
+      };
+      console.log(this.editform);
+    },
+    edit() {
+      this.$axios
+        .post("/api/admin/product/update", {
+          product_id: this.editform.id,
+          product_name: this.editform.name,
+          category_id: this.editform.categoryId,
+          product_title: this.editform.title,
+          product_intro: this.editform.intro,
+          product_picture: this.editform.pictureUrl,
+          product_price: this.editform.price,
+          product_sellprice: this.editform.sellprice,
+          product_num: this.editform.num,
+          product_sales: this.editform.sales,
+        })
+        .then((res) => {
+          this.$notify.success("商品编辑成功！");
+          console.log(res.data);
+          this.editVisible = false;
+          this.editform = {};
+          this.load();
+        })
+        .catch((err) => {
+          this.$notify.error("商品编辑失败!");
+          console.log(err);
+          this.editVisible = false;
+          this.load();
+        });
     },
     load() {
       this.$axios
@@ -378,23 +466,22 @@ export default {
       console.log(this.currentPage);
       this.load();
     },
-    handleDelete(id){
-      console.log(id)
+    handleDelete(id) {
+      console.log(id);
       this.$axios
-        .post('/api/admin/product/remove',{
-          product_id:id
-        }
-        )
-        .then((res)=>{
+        .post("/api/admin/product/remove", {
+          product_id: id,
+        })
+        .then((res) => {
           console.log(res.data);
           this.$notify.success("删除成功");
           this.load();
         })
-        .catch((err)=>{
-          console.log(err)
+        .catch((err) => {
+          console.log(err);
           this.$notify.error("删除失败");
-        })
-    }
+        });
+    },
   },
 };
 </script>
