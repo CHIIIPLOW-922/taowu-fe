@@ -11,26 +11,15 @@
       <el-button type="primary" @click="add" size="mini">新增</el-button>
     </div>
     <el-table :data="tableData" style="width: 100%;" stripe border size="small">
-      <el-table-column prop="product_id" label="ID" style="width: 5">
-      </el-table-column>
-      <el-table-column prop="product_name" label="商品名称"> </el-table-column>
-      <el-table-column prop="category_idd" label="类别ID"> </el-table-column>
-      <el-table-column prop="product_title" label="标题"> </el-table-column>
-      <el-table-column prop="product_picture" label="图片地址">
-      </el-table-column>
-      <el-table-column prop="product_price" label="商品价格"> </el-table-column>
-      <el-table-column prop="product_sellprice" label="商城价格">
-      </el-table-column>
-      <el-table-column prop="product_num" label="销售数量"> </el-table-column>
-      <el-table-column prop="product_sales" label="商品库存"> </el-table-column>
-      <el-table-column prop="product_intro" label="商品描述"> </el-table-column>
+      <el-table-column prop="category_id" label="类别ID" width="70"> </el-table-column>
+      <el-table-column prop="category_name" label="标题"> </el-table-column>
       <el-table-column label="操作">
         <template #default="scope">
-          <el-button size="mini">编辑</el-button>
+          <el-button size="mini" @click=editDialog(scope.row)>编辑</el-button>
           <el-popconfirm
             title="确认删除吗？"
-            @confirm="handleDelete(scope.row.id)"
-            >//el里面的confirm方法，根据id删除
+            @confirm="handleDelete(scope.row.category_id)"
+            >
             <template #reference>
               <el-button size="mini" type="danger">删除</el-button>
             </template>
@@ -40,9 +29,9 @@
     </el-table>
     <div style="margin: 10px 0">
       <el-pagination
-        :currentPage="currentPage"
+        :currentPage="categoryCurrentPage"
         :page-sizes="[5, 15, 30]"
-        :page-size="pageSize"
+        :page-size="categoryPageSize"
         layout="total, sizes, prev, pager, next, jumper"
         :total="total"
         @size-change="handleSizeChange"
@@ -50,46 +39,33 @@
       >
       </el-pagination>
 
-      <el-dialog :visible="dialogVisible" title="提示" width="30%">
-        <el-form :model="form" label-width="120px">
+      <el-dialog :visible="addCategoryVisible" title="新增" width="30%">
+        <el-form :model="addCategoryForm" label-width="120px">
           <el-form-item label="商品名称">
-            <el-input v-model="form.shopName" style="width: 80%"></el-input>
-          </el-form-item>
-          <el-form-item label="商品图片" v-model="form.url">
-            <el-upload
-              action=""
-              :http-request="upload"
-              :limit="1"
-              list-type="picture-card"
-            >
-              <el-button type="primary">点击上传</el-button>
-            </el-upload>
-          </el-form-item>
-          <el-form-item label="卖点">
-            <el-input v-model="form.shopPoint" style="width: 80%"></el-input>
-          </el-form-item>
-          <el-form-item label="商品价格">
-            <el-input v-model="form.price" style="width: 80%"></el-input>
-          </el-form-item>
-          <el-form-item label="商品数量">
-            <el-input
-              type="textarea"
-              v-model="form.num"
-              style="width: 80%"
-            ></el-input>
-          </el-form-item>
-          <el-form-item label="商品描述">
-            <el-input
-              type="textarea"
-              v-model="form.describes"
-              style="width: 80%"
-            ></el-input>
+            <el-input v-model="addCategoryForm.categoryName" style="width: 80%"></el-input>
           </el-form-item>
         </el-form>
         <template #footer>
           <span class="dialog-footer">
-            <el-button @click="dialogVisible = false">取消</el-button>
-            <el-button type="primary" @click="save">确定</el-button>
+            <el-button @click="addCategoryVisible = false">取消</el-button>
+            <el-button type="primary" @click="saveCategory">确定</el-button>
+          </span>
+        </template>
+      </el-dialog>
+
+      <el-dialog :visible="editCategoryVisible" title="编辑商品分类" width="30%">
+        <el-form :model="editCategoryForm" label-width="120px">
+          <el-form-item label="分类ID">
+            <el-input v-model="editCategoryForm.categoryId" style="width: 80%" :disabled="true"></el-input>
+          </el-form-item>
+          <el-form-item label="分类名称">
+            <el-input v-model="editCategoryForm.categoryName" style="width: 80%"></el-input>
+          </el-form-item>
+        </el-form>
+        <template #footer>
+          <span class="dialog-footer">
+            <el-button @click="editCategoryVisible = false">取消</el-button>
+            <el-button type="primary" @click="editCategoryInfo">确定</el-button>
           </span>
         </template>
       </el-dialog>
@@ -102,12 +78,13 @@ export default {
   name: "category-table",
   data() {
     return {
-      search: "",
       total: 0,
-      currentPage: 1,
-      pageSize: 15,
-      dialogVisible: false,
-      form: {},
+      categoryCurrentPage: 1,
+      categoryPageSize: 15,
+      addCategoryVisible: false,
+      editCategoryVisible:false,
+      addCategoryForm: {},
+      editCategoryForm:{},
       tableData: [],
     };
   },
@@ -115,44 +92,55 @@ export default {
     this.load();
   },
   methods: {
-    upload(param) {
-      const formData = new FormData();
-      formData.append("file", param.file);
-      console.log(formData);
+    saveCategory(){
       this.$axios
-        .post("/api/admin/files/upload", formData)
-        .then((response) => {
-          //根据返回值进行判断是否上传成功
-          console.log(response);
-          if (response.data.code === "922") {
-            this.form.url = response.data.data;
-            //上传成功
-            console.log("上传图片成功");
-          } else {
-            //上传失败
-            console.log("图片上传失败");
-          }
+        .post("/api/admin/category/save",{
+          category_name:this.addCategoryForm.categoryName
         })
-        .catch((err) => {
-          console.log(err);
-          console.log("异常处理");
-        });
+        .then((res)=>{
+          this.$notify.success("添加商品分类成功！");
+          console.log(res.data);
+          this.addCategoryVisible=false;
+          this.addCategoryForm={};
+          this.load();
+        })
+        .catch((err)=>{
+          this.$notify.error("添加商品分类失败！");
+          console.log(err)
+        })
+    },
+    editCategoryInfo(){
+      this.$axios
+        .post("/api/admin/category/update",{
+          category_id:this.editCategoryForm.categoryId,
+          category_name:this.editCategoryForm.categoryName
+        })
+        .then((res)=>{
+          this.$notify.success("编辑商品分类成功！");
+          console.log(res.data);
+          this.editCategoryVisible=false;
+          this.editCategoryForm={};
+          this.load();
+        })
+        .catch((err)=>{
+          this.$notify.error("编辑商品分类失败！");
+          console.log(err)
+        })
     },
     add() {
-      (this.dialogVisible = true), (this.form = {});
+      (this.addCategoryVisible = true), (this.form = {});
     },
     load() {
       this.$axios
-        .get("/api/admin/product/list", {
+        .get("/api/admin/category/list", {
           parmas: {
-            search: this.search,
-            currentPage: this.currentPage,
-            pageSize: this.pageSize,
+            currentPage: this.categoryCurrentPage,
+            pageSize: this.categoryPageSize,
           },
         })
         .then((res) => {
           this.tableData = res.data.data;
-          this.total = res.data.total;
+          this.total = res.data.total
           console.log(res.data);
         })
         .catch((err) => {
@@ -172,6 +160,28 @@ export default {
       console.log(this.currentPage);
       this.load();
     },
+    editDialog(data){
+      this.editCategoryVisible=true;
+      this.editCategoryForm = {
+        categoryId:data.category_id,
+        categoryName:data.category_name
+      }
+    },
+    handleDelete(id){
+      this.$axios
+        .post("/api/admin/category/remove",{
+          category_id:id,
+        })
+        .then((res)=>{
+          this.$notify.success("删除商品分类成功！");
+          console.log(res.data);
+          this.load();
+        })
+        .catch((err)=>{
+          this.$notify.error("删除商品分类失败！");
+          console.log(err)
+        })
+    }
   },
 };
 </script>
