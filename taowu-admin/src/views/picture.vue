@@ -167,10 +167,10 @@ export default {
     },
     productLoad(){
       this.$axios
-        .post("/api/admin/product/list",{
+        .get("/api/admin/product/list",{params:{
           currentPage:1,
           pageSize:1000
-        })
+        }})
         .then((res)=>{
           this.productList = res.data.data;
           console.log(res.data);
@@ -182,11 +182,9 @@ export default {
     },
     load() {
       this.$axios
-        .get("/api/admin/pirture/list", {
-          parmas: {
-            currentPage: this.currentPage,
-            pageSize: this.pageSize,
-          },
+        .post("/api/admin/picture/list", {
+            currentPage: this.picCurrentPage,
+            pageSize: this.picPageSize,
         })
         .then((res) => {
           this.tableData = res.data.data;
@@ -199,15 +197,15 @@ export default {
     },
     handleSizeChange(pageSize) {
       //改变当前每页的个数触发
-      this.pageSize = pageSize;
-      console.log(this.pageSize); //赋值
+      this.picPageSize = pageSize;
+      console.log(this.picPageSize); //赋值
       this.load();
     },
 
     handleCurrentChange(pageNum) {
-      this.currentPage = pageNum;
+      this.picCurrentPage = pageNum;
       //改变当前页码触发
-      console.log(this.currentPage);
+      console.log(this.picCurrentPage);
       this.load();
     },
   },

@@ -132,11 +132,10 @@ export default {
     },
     load() {
       this.$axios
-        .get("/api/admin/category/list", {
-          parmas: {
+        .post("/api/admin/category/list", {
             currentPage: this.categoryCurrentPage,
             pageSize: this.categoryPageSize,
-          },
+
         })
         .then((res) => {
           this.tableData = res.data.data;

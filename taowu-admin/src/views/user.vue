@@ -64,7 +64,7 @@
       <el-dialog :visible="userEditVisible" title="编辑商城用户" width="30%">
         <el-form :model="editform" label-width="120px">
           <el-form-item label="用户ID">
-            <el-input v-model="editform.userId" style="width: 80%"></el-input>
+            <el-input v-model="editform.userId" style="width: 80%" :disabled="true"></el-input>
           </el-form-item>
           <el-form-item label="用户账号">
             <el-input v-model="editform.userName" style="width: 80%"></el-input>
@@ -127,7 +127,7 @@ export default {
           user_id: id,
         })
         .then((res) => {
-          this.$notify.success("用户删除成功！");
+          this.$notify.success(res.data.msg);
           console.log(res.data);
           this.load();
         })
@@ -141,11 +141,9 @@ export default {
     },
     load() {
       this.$axios
-        .get("/api/admin/user/list", {
-          parmas: {
+        .post("/api/admin/user/list", {
             currentPage: this.userCurrentPage,
-            pageSize: this.userPageSize,
-          },
+            pageSize: this.userPageSize
         })
         .then((res) => {
           this.tableData = res.data.data;

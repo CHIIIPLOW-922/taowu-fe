@@ -57,7 +57,7 @@ export default {
         })
         .then((res) => {
           this.tableData = res.data.data;
-          this.total = res.data.total;
+          this.total = this.tableData.length;
           console.log(res.data);
         })
         .catch((err) => {
