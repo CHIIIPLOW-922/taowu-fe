@@ -49,7 +49,7 @@
         >
           <div class="logo">
             <router-link to="/">
-              <img src="./assets/imgs/logo.png" alt />
+              <img class="logoImg" src="./assets/imgs/logo.png" alt />
             </router-link>
           </div>
           <el-menu-item index="/">首页</el-menu-item>
@@ -299,7 +299,7 @@ a:hover {
   height: 60px;
   width: 189px;
   float: left;
-  margin-right: 100px;
+  margin-right: 50px;
 }
 .el-header .so {
   margin-top: 10px;
@@ -363,6 +363,10 @@ a:hover {
 }
 .footer .mod_help p span {
   padding: 0 22px;
+}
+.logoImg{
+  width: 160px;
+  height: 50px;
 }
 /* 底栏容器CSS END */
 </style>
