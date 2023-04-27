@@ -91,7 +91,7 @@ export default {
         user_id: this.$store.getters.getUser.user_id
       })
       .then(res => {
-        if (res.data.code === "001") {
+        if (res.data.code === "922") {
           this.orders = res.data.data;
         } else {
           this.notifyError(res.data.msg);

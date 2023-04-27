@@ -46,22 +46,22 @@
         <p class="intro">{{productDetails.product_intro}}</p>
         <p class="store">小米自营</p>
         <div class="price">
-          <span>{{productDetails.product_selling_price}}元</span>
+          <span>{{productDetails.product_sellprice}}元</span>
           <span
-            v-show="productDetails.product_price != productDetails.product_selling_price"
+            v-show="productDetails.product_price != productDetails.product_sellprice"
             class="del"
           >{{productDetails.product_price}}元</span>
         </div>
         <div class="pro-list">
           <span class="pro-name">{{productDetails.product_name}}</span>
           <span class="pro-price">
-            <span>{{productDetails.product_selling_price}}元</span>
+            <span>{{productDetails.product_sellprice}}元</span>
             <span
-              v-show="productDetails.product_price != productDetails.product_selling_price"
+              v-show="productDetails.product_price != productDetails.product_sellprice"
               class="pro-del"
             >{{productDetails.product_price}}元</span>
           </span>
-          <p class="price-sum">总计 : {{productDetails.product_selling_price}}元</p>
+          <p class="price-sum">总计 : {{productDetails.product_sellprice}}元</p>
         </div>
         <!-- 内容区底部按钮 -->
         <div class="button">
@@ -157,12 +157,12 @@ export default {
         })
         .then(res => {
           switch (res.data.code) {
-            case "001":
+            case "922":
               // 新加入购物车成功
               this.unshiftShoppingCart(res.data.data);
               this.notifySucceed(res.data.msg);
               break;
-            case "002":
+            case "229":
               // 该商品已经在购物车，数量+1
               this.addShoppingCartNum(this.productID);
               this.notifySucceed(res.data.msg);
@@ -187,12 +187,12 @@ export default {
         return;
       }
       this.$axios
-        .post("/api/collect/save", {
+        .post("/api/wishlist/save", {
           user_id: this.$store.getters.getUser.user_id,
           product_id: this.productID
         })
         .then(res => {
-          if (res.data.code == "001") {
+          if (res.data.code == "922") {
             // 添加收藏成功
             this.notifySucceed(res.data.msg);
           } else {

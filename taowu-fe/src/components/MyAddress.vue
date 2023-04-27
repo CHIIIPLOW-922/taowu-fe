@@ -11,7 +11,7 @@
           <el-input
             prefix-icon="el-icon-user-solid"
             placeholder="请输入联系人!"
-            v-model="address.linkman"
+            v-model="address.receiver"
           ></el-input>
         </el-form-item>
         <el-form-item prop="phone">
@@ -19,7 +19,7 @@
             prefix-icon="el-icon-view"
             type="text"
             placeholder="请输入练习电话"
-            v-model="address.phone"
+            v-model="address.receiver_phone"
           ></el-input>
         </el-form-item>
         <el-form-item prop="address">
@@ -46,8 +46,8 @@ export default {
     return {
       isAdd: false, // 控制注册组件是否显示
       address: {
-        linkname: "",
-        phone: "",
+        receiver: "",
+        receiver_phone: "",
         address: ""
       }
   },
@@ -66,11 +66,11 @@ export default {
         //如果通过校验开始注册
           this.$axios
             .post("/api/user/address/save", {
-                this.address
+                address:this.address
             })
             .then(res => {
               // “001”代表注册成功，其他的均为失败
-              if (res.data.code === "001") {
+              if (res.data.code === "922") {
                 // 隐藏注册组件
                 this.isAdd = false;
                 // 弹出通知框提示注册成功信息

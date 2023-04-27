@@ -30,8 +30,8 @@
               @click="confirmAddress=item.id"
               @dblclick="removeItem(index)"
             >
-              <h2>{{item.linkman}}</h2>
-              <p class="phone">{{item.phone}}</p>
+              <h2>{{item.receiver}}</h2>
+              <p class="phone">{{item.receiver_phone}}</p>
               <p class="address"><font color='green'>{{item.address}}</font></p>
 
            
@@ -150,21 +150,21 @@
         ref="ruleForm"
         class="demo-ruleForm"
       >
-        <el-form-item prop="linkman">
+        <el-form-item prop="receiver">
           <el-input
             prefix-icon="el-icon-user-solid"
             placeholder="请输入收件人姓名!"
-            v-model="add.linkman"
+            v-model="add.receiver"
             maxlength="20"
             show-word-limit
           ></el-input>
         </el-form-item>
-        <el-form-item prop="phone">
+        <el-form-item prop="receiverPhone">
           <el-input
             prefix-icon="el-icon-view"
             type="text"
             placeholder="请输入收件人电话"
-            v-model="add.phone"
+            v-model="add.receiverPhone"
             maxlength="11"
             show-word-limit
           ></el-input>
@@ -205,8 +205,8 @@ export default {
       delIndex:0,
       //添加地址接口
       add:{
-        linkman:"",
-        phone:"",
+        receiver:"",
+        receiverPhone:"",
         address:""
       },
 
@@ -259,7 +259,7 @@ export default {
         .then(res => {
           switch (res.data.code) {
             // “001”代表结算成功
-            case "001":
+            case "922":
                this.delId = 0;
                this.dialogVisible=false
                this.address.splice(this.delIndex,1);
@@ -282,12 +282,12 @@ export default {
       this.$axios
         .post("/api/user/address/save", {
           user_id: this.$store.getters.getUser.user_id,
-          add: this.add
+          address: this.add
         })
         .then(res => {
           switch (res.data.code) {
             // “001”代表结算成功
-            case "001":
+            case "922":
               this.isAdd = false; //隐藏弹出框
               this.address = res.data.data; //接收新地址内容
               // 提示结算结果 
@@ -313,7 +313,7 @@ export default {
           let products = this.getCheckGoods;
           switch (res.data.code) {
             // “001”代表结算成功
-            case "001":
+            case "922":
               for (let i = 0; i < products.length; i++) {
                 const temp = products[i];
                 // 删除已经结算的购物车商品

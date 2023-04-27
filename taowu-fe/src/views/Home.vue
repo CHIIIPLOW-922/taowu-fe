@@ -3,7 +3,7 @@
     <!-- 轮播图 -->
     <div class="block">
       <el-carousel height="460px">
-        <el-carousel-item v-for="item in carousel" :key="item.carousel_id">
+        <el-carousel-item v-for="item in rotation" :key="item.rotation_id">
          <router-link :to="{ path: '/goods/details', query: {productID:item.product_id} }">
           <img style="height:460px;" :src="item.imgPath.includes('http:')?item.imgPath:$target + item.imgPath" :alt="item.describes" />
             </router-link>
@@ -98,7 +98,7 @@
 export default {
   data() {
     return {
-      carousel: "", // 轮播图数据
+      rotation: "", // 轮播图数据
       phoneList: "", // 手机商品列表
       miTvList: "", // 小米电视商品列表
       applianceList: "", // 家电商品列表
@@ -156,9 +156,10 @@ export default {
   created() {
     // 获取轮播图数据
     this.$axios
-      .post("/api/carousel/list", {})
+      .post("/api/rotation/list", {})
       .then(res => {
-        this.carousel = res.data.data;
+        this.rotation = res.data.data;
+        console.log(res.data)
       })
       .catch(err => {
         return Promise.reject(err);

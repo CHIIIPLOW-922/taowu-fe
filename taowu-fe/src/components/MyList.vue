@@ -21,9 +21,9 @@
           <h2>{{item.product_name}}</h2>
           <h3>{{item.product_title}}</h3>
           <p>
-            <span>{{item.product_selling_price}}元</span>
+            <span>{{item.product_sellprice}}元</span>
             <span
-              v-show="item.product_price != item.product_selling_price"
+              v-show="item.product_price != item.product_sellprice"
               class="del"
             >{{item.product_price}}元</span>
           </p>
@@ -65,13 +65,13 @@ export default {
   methods: {
     deleteCollect(product_id) {
       this.$axios
-        .post("/api/collect/remove", {
+        .post("/api/wishlist/remove", {
           user_id: this.$store.getters.getUser.user_id,
           product_id: product_id
         })
         .then(res => {
           switch (res.data.code) {
-            case "001":
+            case "922":
               // 删除成功
               // 删除删除列表中的该商品信息
               for (let i = 0; i < this.list.length; i++) {

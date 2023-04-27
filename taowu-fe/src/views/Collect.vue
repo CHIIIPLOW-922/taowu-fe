@@ -32,11 +32,11 @@ export default {
   activated() {
     // 获取收藏数据
     this.$axios
-      .post("/api/collect/list", {
+      .post("/api/wishlist/list", {
         user_id: this.$store.getters.getUser.user_id
       })
       .then(res => {
-        if (res.data.code === "001") {
+        if (res.data.code === "922") {
           this.collectList = res.data.data;
         }
       })

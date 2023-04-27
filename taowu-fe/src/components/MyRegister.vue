@@ -61,7 +61,7 @@ export default {
           })
           .then(res => {
             // “001”代表用户名不存在，可以注册
-            if (res.data.code == "001") {
+            if (res.data.code == "922") {
               this.$refs.ruleForm.validateField("checkPass");
               return callback();
             } else {

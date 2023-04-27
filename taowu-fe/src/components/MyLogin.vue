@@ -94,7 +94,7 @@ export default {
             })
             .then(res => {
               // “001”代表登录成功，其他的均为失败
-              if (res.data.code === "001") {
+              if (res.data.code === "922") {
                 // 隐藏登录组件
                 this.isLogin = false;
                 // 登录信息存到本地
