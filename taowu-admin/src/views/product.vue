@@ -410,11 +410,9 @@ export default {
     },
     categoryLoad() {
       this.$axios
-        .get("/api/admin/category/list", {
-          params: {
+        .post("/api/admin/category/list", {
             currentPage: 1,
-            pageSize: 30,
-          },
+            pageSize: 100,
         })
         .then((res) => {
           this.categoryList = res.data.data;

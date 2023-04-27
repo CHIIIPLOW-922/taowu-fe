@@ -49,11 +49,9 @@ export default {
   methods: {
     load() {
       this.$axios
-        .get("/api/admin/order/list", {
-          parmas: {
+        .post("/api/admin/order/list", {
             currentPage: this.orderCurrentPage,
             pageSize: this.orderPageSize,
-          },
         })
         .then((res) => {
           this.tableData = res.data.data;
