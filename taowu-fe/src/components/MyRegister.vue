@@ -32,10 +32,35 @@
           ></el-input>
         </el-form-item>
         <el-form-item prop="phone">
-          <el-input prefix-icon="el-icon-view" placeholder="请输入手机号" v-model="RegisterUser.phone"></el-input>
+          <el-input
+            prefix-icon="el-icon-phone-outline"
+            placeholder="请输入手机号"
+            v-model="RegisterUser.phone"
+          ></el-input>
+        </el-form-item>
+        <el-form-item prop="verifyCode">
+          <el-input
+            prefix-icon="el-icon-message-solid"
+            v-model="RegisterUser.verifyCode"
+            placeholder="请输入短信验证码"
+          ></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button size="medium" type="primary" @click="Register" style="width:100%;">注册</el-button>
+          <el-button
+            :disabled="countdown > 0"
+            @click="sendCode"
+            style="width: 100%"
+            >{{ countdown > 0 ? `${countdown}s` : "发送验证码" }}</el-button
+          >
+        </el-form-item>
+        <el-form-item>
+          <el-button
+            size="medium"
+            type="primary"
+            @click="Register"
+            style="width: 100%"
+            >注册</el-button
+          >
         </el-form-item>
       </el-form>
     </el-dialog>
@@ -51,44 +76,29 @@ export default {
       if (!value) {
         return callback(new Error("请输入用户名"));
       }
-      // 用户名以字母开头,长度在5-16之间,允许字母数字下划线
-      const userNameRule = /^[a-zA-Z][a-zA-Z0-9_]{4,15}$/;
-      if (userNameRule.test(value)) {
-        //判断数据库中是否已经存在该用户名
-        this.$axios
-          .post("/api/user/check", {
-            userName: this.RegisterUser.name
-          })
-          .then(res => {
-            // “001”代表用户名不存在，可以注册
-            if (res.data.code == "922") {
-              this.$refs.ruleForm.validateField("checkPass");
-              return callback();
-            } else {
-              return callback(new Error(res.data.msg));
-            }
-          })
-          .catch(err => {
-            return Promise.reject(err);
-          });
-      } else {
-        return callback(new Error("字母开头,长度5-16之间,允许字母数字下划线"));
-      }
+      //判断数据库中是否已经存在该用户名
+      this.$axios
+        .post("/api/user/check", {
+          userName: this.RegisterUser.name,
+        })
+        .then((res) => {
+          // “001”代表用户名不存在，可以注册
+          if (res.data.code == "922") {
+            return callback();
+          } else {
+            return callback(new Error(res.data.msg));
+          }
+        })
+        .catch((err) => {
+          return Promise.reject(err);
+        });
     };
     // 密码的校验方法
     let validatePass = (rule, value, callback) => {
       if (value === "") {
         return callback(new Error("请输入密码"));
-      }
-      // 密码以字母开头,长度在6-18之间,允许字母数字和下划线
-      const passwordRule = /^[a-zA-Z]\w{5,17}$/;
-      if (passwordRule.test(value)) {
-        this.$refs.ruleForm.validateField("checkPass");
+      }else{
         return callback();
-      } else {
-        return callback(
-          new Error("字母开头,长度6-18之间,允许字母数字和下划线")
-        );
       }
     };
     // 确认密码的校验方法
@@ -98,58 +108,92 @@ export default {
       }
       // 校验是否以密码一致
       if (this.RegisterUser.pass != "" && value === this.RegisterUser.pass) {
-        this.$refs.ruleForm.validateField("checkPass");
         return callback();
       } else {
         return callback(new Error("两次输入的密码不一致"));
       }
     };
+
     return {
       isRegister: false, // 控制注册组件是否显示
       RegisterUser: {
         name: "",
         pass: "",
         confirmPass: "",
-        phone: ""
+        phone: "",
+        verifyCode: "",
       },
       // 用户信息校验规则,validator(校验方法),trigger(触发方式),blur为在组件 Input 失去焦点时触发
       rules: {
         name: [{ validator: validateName, trigger: "blur" }],
         pass: [{ validator: validatePass, trigger: "blur" }],
-        confirmPass: [{ validator: validateConfirmPass, trigger: "blur" }]
-      }
+        confirmPass: [{ validator: validateConfirmPass, trigger: "blur" }],
+        phone: [{ required: true, message: "请输入手机号码", trigger: "blur" }],
+        verifyCode: [{ required: true, message: "请输入短信验证码", trigger: "blur" }],
+      },
+      countdown: 0,
     };
   },
   watch: {
     // 监听父组件传过来的register变量，设置this.isRegister的值
-    register: function(val) {
+    register: function (val) {
       if (val) {
         this.isRegister = val;
       }
     },
     // 监听this.isRegister变量的值，更新父组件register变量的值
-    isRegister: function(val) {
+    isRegister: function (val) {
       if (!val) {
         this.$refs["ruleForm"].resetFields();
         this.$emit("fromChild", val);
       }
-    }
+    },
   },
   methods: {
+    sendCode() {
+      if (this.RegisterUser.phone === "") {
+        this.notifyError("请先输入手机号码再发送短信验证码");
+      } else {
+        var value = this.RegisterUser.phone;
+        const phoneRule = /^1[3456789]\d{9}$/;
+        if (phoneRule.test(value)) {
+          this.$axios
+            .post("/api/user/sendPhoneSms?phoneNumber=" + value)
+            .then((res) => {
+              this.notifySucceed("短信发送成功！");
+              console.log(res.data.code)
+              this.countdown = 60;
+              const timer = setInterval(() => {
+                this.countdown--;
+                if (this.countdown === 0) {
+                  clearInterval(timer);
+                }
+              }, 1000);
+            })
+            .catch((err) => {
+              this.notifyError("发送失败！");
+              console.log(err)
+            });
+        } else {
+          this.notifyError("输入的手机号码格式不正确");
+        }
+      }
+    },
     Register() {
       // 通过element自定义表单校验规则，校验用户输入的用户信息
-      this.$refs["ruleForm"].validate(valid => {
+      this.$refs["ruleForm"].validate((valid) => {
         //如果通过校验开始注册
         if (valid) {
           this.$axios
-            .post("/api/user/register", {
+            .post("/api/user/register?verifyCode="+this.RegisterUser.verifyCode, {
               userName: this.RegisterUser.name,
-              password: this.RegisterUser.pass,
-              userPhonenumber: this.RegisterUser.phone
+              userPassword: this.RegisterUser.pass,
+              userPhone: this.RegisterUser.phone,
             })
-            .then(res => {
+            .then((res) => {
               // “001”代表注册成功，其他的均为失败
-              if (res.data.code === "001") {
+              if (res.data.code === "922") {
+                console.log(res)
                 // 隐藏注册组件
                 this.isRegister = false;
                 // 弹出通知框提示注册成功信息
@@ -159,15 +203,17 @@ export default {
                 this.notifyError(res.data.msg);
               }
             })
-            .catch(err => {
+            .catch((err) => {
+              console.log(err)
               return Promise.reject(err);
             });
         } else {
+          console.log("错误")
           return false;
         }
       });
-    }
-  }
+    },
+  },
 };
 </script>
 <style>
