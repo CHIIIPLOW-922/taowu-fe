@@ -32,14 +32,6 @@ const routes = [
         component: () => import("@/views/category")
       },
       {
-        path: '/myInfo',
-        name: 'myInfo',
-        meta: {
-          requireAuth: true
-        },
-        component: () => import("@/views/myInfo")
-      },
-      {
         path: '/product',
         name: 'product',
         meta: {

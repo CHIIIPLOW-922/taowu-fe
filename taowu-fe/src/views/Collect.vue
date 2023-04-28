@@ -80,7 +80,7 @@ export default {
   height: 300px;
   padding: 0 0 130px 558px;
   margin: 65px 0 0;
-  background: url(../assets/imgs/cart-empty.png) no-repeat 124px 0;
+  background: url(../assets/imgs/cart-empty.png) no-repeat 100px 0;
   color: #b0b0b0;
   overflow: hidden;
 }

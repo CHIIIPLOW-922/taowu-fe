@@ -132,7 +132,7 @@
       title="删除提示!"
       :visible.sync="dialogVisible"
       width="30%"
-      :before-close="handleClose">
+>
       <span> <font color='red'>{{dialogValue}}</font></span>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">取 消</el-button>
@@ -312,7 +312,7 @@ export default {
         .then(res => {
           let products = this.getCheckGoods;
           switch (res.data.code) {
-            // “001”代表结算成功
+            // “922”代表结算成功
             case "922":
               for (let i = 0; i < products.length; i++) {
                 const temp = products[i];

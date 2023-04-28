@@ -265,11 +265,7 @@
               style="width: 85%"
             ></el-input>
           </el-form-item>
-          <el-form-item
-            label="商品图片"
-            v-model="pictureUrl"
-            size="mini"
-          >
+          <el-form-item label="商品图片" v-model="pictureUrl" size="mini">
             <el-upload
               action=""
               :http-request="upload"
@@ -308,7 +304,7 @@ export default {
       form: {},
       editform: {},
       tableData: [],
-      pictureUrl:""
+      pictureUrl: "",
     };
   },
   created() {
@@ -342,10 +338,13 @@ export default {
         });
     },
     add() {
-      (this.dialogVisible = true), (this.form = {},this.pictureUrl="");
+      this.dialogVisible = true
+      this.categoryLoad();
+      ((this.form = {}), (this.pictureUrl = ""));
     },
     editProduct(data) {
       this.editVisible = true;
+      this.categoryLoad();
       console.log(data);
       this.editform = {
         id: data.product_id,
@@ -358,7 +357,7 @@ export default {
         sales: data.product_sales,
         intro: data.product_intro,
       };
-      this.pictureUrl=data.product_picture;
+      this.pictureUrl = data.product_picture;
       console.log(this.editform);
     },
     edit() {
@@ -411,8 +410,8 @@ export default {
     categoryLoad() {
       this.$axios
         .post("/api/admin/category/list", {
-            currentPage: 1,
-            pageSize: 100,
+          currentPage: 1,
+          pageSize: 100,
         })
         .then((res) => {
           this.categoryList = res.data.data;

@@ -44,7 +44,7 @@
       <div class="content">
         <h1 class="name">{{productDetails.product_name}}</h1>
         <p class="intro">{{productDetails.product_intro}}</p>
-        <p class="store">小米自营</p>
+        <p class="store">淘物自营</p>
         <div class="price">
           <span>{{productDetails.product_sellprice}}元</span>
           <span
@@ -72,10 +72,10 @@
         <div class="pro-policy">
           <ul>
             <li>
-              <i class="el-icon-circle-check"></i> 小米自营
+              <i class="el-icon-circle-check"></i> 淘物自营
             </li>
             <li>
-              <i class="el-icon-circle-check"></i> 小米发货
+              <i class="el-icon-circle-check"></i> 淘物发货
             </li>
             <li>
               <i class="el-icon-circle-check"></i> 7天无理由退货

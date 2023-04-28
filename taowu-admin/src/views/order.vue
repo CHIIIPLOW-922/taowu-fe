@@ -7,15 +7,31 @@
         <el-breadcrumb-item>订单列表</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
-    <el-table :data="tableData" style="width: 100%;margin-top:50px" stripe border size="small">
+    <el-table
+      :data="tableData"
+      style="width: 100%; margin-top: 50px"
+      stripe
+      border
+      size="small"
+    >
       <el-table-column prop="order_id" label="订单ID" width="190">
       </el-table-column>
-      <el-table-column prop="user_id" label="用户ID"  width="190"> </el-table-column>
-      <el-table-column prop="product_num" label="商品种类" width="190"> </el-table-column>
-      <el-table-column prop="order_num" label="订单商品数量" width="190"> </el-table-column>
+      <el-table-column prop="user_id" label="用户ID" width="190">
+      </el-table-column>
+      <el-table-column prop="product_num" label="商品种类" width="190">
+      </el-table-column>
+      <el-table-column prop="order_num" label="订单商品数量" width="190">
+      </el-table-column>
       <el-table-column prop="order_price" label="订单金额" width="190">
       </el-table-column>
-      <el-table-column prop="order_time" label="订单时间"> </el-table-column>
+      <el-table-column
+        prop="order_time"
+        label="订单时间"
+      >
+        <template slot-scope="{row}">
+          {{ row.order_time | dateFormat }}
+        </template>
+      </el-table-column>
     </el-table>
     <div style="margin: 10px 0">
       <el-pagination
@@ -50,8 +66,8 @@ export default {
     load() {
       this.$axios
         .post("/api/admin/order/list", {
-            currentPage: this.orderCurrentPage,
-            pageSize: this.orderPageSize,
+          currentPage: this.orderCurrentPage,
+          pageSize: this.orderPageSize,
         })
         .then((res) => {
           this.tableData = res.data.data;

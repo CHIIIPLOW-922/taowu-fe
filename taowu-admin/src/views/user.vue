@@ -64,7 +64,11 @@
       <el-dialog :visible="userEditVisible" title="编辑商城用户" width="30%">
         <el-form :model="editform" label-width="120px">
           <el-form-item label="用户ID">
-            <el-input v-model="editform.userId" style="width: 80%" :disabled="true"></el-input>
+            <el-input
+              v-model="editform.userId"
+              style="width: 80%"
+              :disabled="true"
+            ></el-input>
           </el-form-item>
           <el-form-item label="用户账号">
             <el-input v-model="editform.userName" style="width: 80%"></el-input>
@@ -127,9 +131,15 @@ export default {
           user_id: id,
         })
         .then((res) => {
-          this.$notify.success(res.data.msg);
-          console.log(res.data);
-          this.load();
+          if (res.data.code === "922") {
+            this.$notify.success(res.data.msg);
+            console.log(res.data);
+            this.load();
+          } else {
+            this.$notify.error(res.data.msg);
+            console.log(res.data);
+            this.load();
+          }
         })
         .catch((err) => {
           this.$notify.error("用户删除失败！");
@@ -142,8 +152,8 @@ export default {
     load() {
       this.$axios
         .post("/api/admin/user/list", {
-            currentPage: this.userCurrentPage,
-            pageSize: this.userPageSize
+          currentPage: this.userCurrentPage,
+          pageSize: this.userPageSize,
         })
         .then((res) => {
           this.tableData = res.data.data;
@@ -163,10 +173,16 @@ export default {
           userPhone: this.editform.userPhone,
         })
         .then((res) => {
-          this.$notify.success("用户编辑成功！");
-          console.log(res.data);
-          this.userEditVisible = false;
-          (this.editform = {}), this.load();
+          if (res.data.code === "922") {
+            this.$notify.success("用户编辑成功！");
+            console.log(res.data);
+            this.userEditVisible = false;
+            (this.editform = {}), this.load();
+          } else {
+            this.$notify.error("用户编辑失败！可能存在账号重复");
+            console.log(res.data);
+            (this.editform = {}), this.load();
+          }
         })
         .catch((err) => {
           this.$notify.error("用户编辑失败！");
@@ -181,10 +197,16 @@ export default {
           userPhone: this.form.userPhone,
         })
         .then((res) => {
-          this.$notify.success("用户添加成功！");
-          console.log(res.data);
-          this.userDialogVisible = false;
-          (this.form = {}), this.load();
+          if (res.data.code === "922") {
+            this.$notify.success("用户添加成功！");
+            console.log(res.data);
+            this.userDialogVisible = false;
+            (this.form = {}), this.load();
+          } else {
+            this.$notify.error("用户重复！");
+            console.log(res.data);
+            (this.form = {}), this.load();
+          }
         })
         .catch((err) => {
           this.$notify.error("用户添加失败！");

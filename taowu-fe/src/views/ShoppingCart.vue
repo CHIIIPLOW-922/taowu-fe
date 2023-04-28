@@ -132,7 +132,7 @@ export default {
         })
         .then(res => {
           switch (res.data.code) {
-            case "001":
+            case "922":
               // “001”代表更新成功
               // 更新vuex状态
               this.updateShoppingCart({
@@ -166,7 +166,6 @@ export default {
         .then(res => {
           switch (res.data.code) {
             case "922":
-              // “001” 删除成功
               // 更新vuex状态
               this.deleteShoppingCart(id);
               // 提示删除成功信息
