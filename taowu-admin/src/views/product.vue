@@ -88,7 +88,7 @@
           <el-popconfirm
             title="确认删除吗？"
             @confirm="handleDelete(scope.row.product_id)"
-            >//el里面的confirm方法，根据id删除
+            >
             <template #reference>
               <el-button size="mini" type="danger">删除</el-button>
             </template>
@@ -338,9 +338,9 @@ export default {
         });
     },
     add() {
-      this.dialogVisible = true
+      this.dialogVisible = true;
       this.categoryLoad();
-      ((this.form = {}), (this.pictureUrl = ""));
+      (this.form = {}), (this.pictureUrl = "");
     },
     editProduct(data) {
       this.editVisible = true;
@@ -359,6 +359,31 @@ export default {
       };
       this.pictureUrl = data.product_picture;
       console.log(this.editform);
+    },
+    searchProduct() {
+      this.$axios
+        .get("/api/admin/product/search", {
+          params: {
+            search: this.search,
+            currentPage: this.currentPage,
+            pageSize: this.pageSize,
+          },
+        })
+        .then((res) => {
+          if (res.data.code === "922") {
+            this.tableData = res.data.data;
+            this.total = res.data.total;
+            console.log(res.data);
+            this.search = "";
+          } else {
+            console.log(res.data);
+            this.$notify.error("搜索失败");
+            this.search="";
+          }
+        })
+        .catch((err) => {
+          this.$notify.error("搜索失败", err);
+        });
     },
     edit() {
       this.$axios
@@ -391,20 +416,20 @@ export default {
     load() {
       this.$axios
         .post("/api/admin/product/list", {
-            search: this.search,
-            currentPage: this.currentPage,
-            pageSize: this.pageSize,
+          search: this.search,
+          currentPage: this.currentPage,
+          pageSize: this.pageSize,
         })
         .then((res) => {
-          if(res.data.code ==="922"){
-          this.tableData = res.data.data;
-          this.total = res.data.total;
-          console.log(res.data);
-          this.search = "";
-          }else{
+          if (res.data.code === "922") {
+            this.tableData = res.data.data;
+            this.total = res.data.total;
             console.log(res.data);
-            this.search="";
-            this.$notify.error('加载错误',res.data.msg);
+            this.search = "";
+          } else {
+            console.log(res.data);
+            this.search = "";
+            this.$notify.error("加载错误", res.data.msg);
           }
         })
         .catch((err) => {
@@ -458,10 +483,6 @@ export default {
       console.log(this.pageSize); //赋值
       this.load();
     },
-    searchProduct() {
-      this.load();
-    },
-
     handleCurrentChange(pageNum) {
       this.currentPage = pageNum;
       //改变当前页码触发
