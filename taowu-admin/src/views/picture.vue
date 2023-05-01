@@ -46,7 +46,12 @@
       <el-dialog :visible="picDialogVisible" title="新增详情页图片" width="30%">
         <el-form :model="form" label-width="120px">
           <el-form-item label="商品">
-            <el-select v-model="form.productId" :data="productList" filterable placeholder="请选择">
+            <el-select
+              v-model="form.productId"
+              :data="productList"
+              filterable
+              placeholder="请选择"
+            >
               <el-option
                 v-for="item in productList"
                 :key="item.product_id"
@@ -105,24 +110,24 @@ export default {
     this.productLoad();
   },
   methods: {
-    savePic(){
+    savePic() {
       this.$axios
-        .post("/api/admin/picture/add",{
-          product_id:this.form.productId,
-          product_picture:this.form.url,
-          intro:this.form.intro
+        .post("/api/admin/picture/add", {
+          product_id: this.form.productId,
+          product_picture: this.form.url,
+          intro: this.form.intro,
         })
-        .then((res)=>{
+        .then((res) => {
           this.$notify.success("详情页图片添加成功！");
-          console.log(res.data)
-          this.picDialogVisible=false;
-          this.form={}
+          console.log(res.data);
+          this.picDialogVisible = false;
+          this.form = {};
           this.load();
         })
-        .catch((err)=>{
+        .catch((err) => {
           this.$notify.error("详情页图片删除失败！");
           console.log(err);
-        })
+        });
     },
     upload(param) {
       const formData = new FormData();
@@ -150,41 +155,41 @@ export default {
     addPic() {
       (this.picDialogVisible = true), (this.form = {});
     },
-    handleDelete(id){
+    handleDelete(id) {
       this.$axios
-        .post("/api/admin/picture/remove",{
-          picture_id:id
+        .post("/api/admin/picture/remove", {
+          picture_id: id,
         })
-        .then((res)=>{
+        .then((res) => {
           this.$notify.success("删除详情页图片成功！");
           console.log(res.data);
           this.load();
         })
-        .catch((err)=>{
+        .catch((err) => {
           this.$notify.error("删除详情页图片失败！");
-          console.log(err)
-        })
+          console.log(err);
+        });
     },
-    productLoad(){
+    productLoad() {
       this.$axios
-        .get("/api/admin/product/list",{params:{
-          currentPage:1,
-          pageSize:1000
-        }})
-        .then((res)=>{
+        .post("/api/admin/product/list", {
+          currentPage: 1,
+          pageSize: 1000,
+        })
+        .then((res) => {
           this.productList = res.data.data;
           console.log(res.data);
         })
-        .catch((err)=>{
-          console.log(err)
-          this.$notify.error("商品信息加载失败！")
-        })
+        .catch((err) => {
+          console.log(err);
+          this.$notify.error("商品信息加载失败！");
+        });
     },
     load() {
       this.$axios
         .post("/api/admin/picture/list", {
-            currentPage: this.picCurrentPage,
-            pageSize: this.picPageSize,
+          currentPage: this.picCurrentPage,
+          pageSize: this.picPageSize,
         })
         .then((res) => {
           this.tableData = res.data.data;

@@ -70,9 +70,9 @@
       </el-table-column>
       <el-table-column prop="product_sellprice" label="商城价格" width="90">
       </el-table-column>
-      <el-table-column prop="product_num" label="销售数量" width="80">
+      <el-table-column prop="product_num" label="商品库存" width="80">
       </el-table-column>
-      <el-table-column prop="product_sales" label="商品库存" width="80">
+      <el-table-column prop="product_sales" label="销售数量" width="80">
       </el-table-column>
       <el-table-column
         prop="product_intro"
@@ -390,18 +390,22 @@ export default {
     },
     load() {
       this.$axios
-        .get("/api/admin/product/list", {
-          params: {
+        .post("/api/admin/product/list", {
             search: this.search,
             currentPage: this.currentPage,
             pageSize: this.pageSize,
-          },
         })
         .then((res) => {
+          if(res.data.code ==="922"){
           this.tableData = res.data.data;
           this.total = res.data.total;
           console.log(res.data);
           this.search = "";
+          }else{
+            console.log(res.data);
+            this.search="";
+            this.$notify.error('加载错误',res.data.msg);
+          }
         })
         .catch((err) => {
           this.$notify.error("数据加载错误", err);
