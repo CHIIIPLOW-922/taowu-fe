@@ -27,6 +27,9 @@
             <li>
               <router-link to="/collect">我的收藏</router-link>
             </li>
+            <li>
+              <router-link to="/myInfo">个人中心</router-link>
+            </li>
             <li :class="getNum > 0 ? 'shopCart-full' : 'shopCart'">
               <router-link to="/shoppingCart">
                 <i class="el-icon-shopping-cart-full"></i> 购物车
@@ -90,7 +93,7 @@
             </div>
           </div>
           <div class="github">
-            <a href="https://atguigu.com" target="_blank">
+            <a href="https://github.com/CHIIIPLOW-922/taowu-fe" target="_blank">
               <div class="github-but"></div>
             </a>
           </div>

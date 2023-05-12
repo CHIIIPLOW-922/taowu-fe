@@ -50,6 +50,14 @@ const routes = [
     }
   },
   {
+    path: '/myInfo',
+    name: 'MyInfo',
+    component: () => import('../views/MyInfo.vue'),
+    meta: {
+      requireAuth: true // 需要验证登录状态
+    }
+  },
+  {
     path: '/confirmOrder',
     name: 'ConfirmOrder',
     component: () => import('../views/ConfirmOrder.vue'),
